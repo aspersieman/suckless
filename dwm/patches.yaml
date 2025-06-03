@@ -2,6 +2,6 @@
 builddir: ~/src/suckless/dwm
 url: https://dwm.suckless.org/patches/
 patches:
-  tilegap:
-    patch: dwm-tilegap-6.4.diff
+  vanitygaps:
+    patch: dwm-cfacts-vanitygaps-6.4_combo.diff
     priority: 10

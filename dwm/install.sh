@@ -14,5 +14,5 @@ sudo mkdir -p /var/log/dwm
 sudo chown -R nicol:nicol /var/log/dwm
 sudo cp startdwm /usr/local/bin/startdwm
 
-rm config.h
+rm -f config.h
 sudo make clean install
