@@ -1,0 +1,7 @@
+---
+builddir: ~/src/suckless/dwm
+url: https://dwm.suckless.org/patches/
+patches:
+  tilegap:
+    patch: dwm-tilegap-6.4.diff
+    priority: 10
