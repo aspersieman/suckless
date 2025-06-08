@@ -37,7 +37,7 @@ static const int new_window_attach_on_end = 0; /*  1 means the new window will a
 #define ICONSIZE 19   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
 
-static const char *fonts[]          = {"UbuntoMono Nerd Font:style:medium:size=12" ,"JetBrainsMono Nerd Font Mono:style:medium:size=19" };
+static const char *fonts[]          = { "Ubuntu Nerd Font:style:medium:size=12:antialias=true:autohint=true" };
 
 // theme
 #include "themes/tokyonight.h"
