@@ -28,7 +28,7 @@ pkg_updates() {
 }
 
 battery() {
-  get_capacity="$(cat /sys/class/power_supply/BAT1/capacity)"
+  get_capacity="$(cat /sys/class/power_supply/BAT0/capacity)"
   printf "^c$blue^   $get_capacity"
 }
 
@@ -44,9 +44,9 @@ mem() {
 
 wlan() {
     # Set the name of the wifi network currently connected
-    WIFI=$(nmcli -t -f active,ssid dev wifi | egrep 'yes')
+    WIFI=$(nmcli -t -f active,ssid dev wifi | egrep 'yes' | sed 's/yes://') 
 	case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
-	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^${WIFI:4}" ;;
+	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^$WIFI" ;;
 	down) printf "^c$black^ ^b$blue^ 󰤭 ^d^%s" " ^c$blue^Disconnected" ;;
 	esac
 }

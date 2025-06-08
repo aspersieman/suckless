@@ -1,5 +1,5 @@
 echo "Install dependencies..."
-sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils
+sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight
 
 # Install https://elkowar.github.io/eww/
 
