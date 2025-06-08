@@ -17,13 +17,13 @@ cpu() {
 
 pkg_updates() {
   #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
-  updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
-  # updates=$({ timeout 20 aptitude search '~U' 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
+  # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
+  updates=$({ timeout 20 apt list --upgradable 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
 
   if [ -z "$updates" ]; then
-    printf "  ^c$green^    Fully Updated"
+      printf "  ^c$green^    Fully Updated"
   else
-    printf "  ^c$green^    $updates"" updates"
+      printf "  ^c$green^    $(($updates - 1))"" updates"
   fi
 }
 
@@ -43,15 +43,17 @@ mem() {
 }
 
 wlan() {
+    # Set the name of the wifi network currently connected
+    WIFI=$(nmcli -t -f active,ssid dev wifi | egrep 'yes')
 	case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
-	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^Connected" ;;
+	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^${WIFI:4}" ;;
 	down) printf "^c$black^ ^b$blue^ 󰤭 ^d^%s" " ^c$blue^Disconnected" ;;
 	esac
 }
 
 clock() {
 	printf "^c$black^ ^b$darkblue^ 󱑆 "
-	printf "^c$black^^b$blue^ $(date '+%H:%M')  "
+	printf "^c$black^^b$blue^ $(date '+%H:%M:%S')  "
 }
 
 while true; do

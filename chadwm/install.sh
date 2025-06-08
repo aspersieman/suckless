@@ -1,3 +1,8 @@
+echo "Install dependencies..."
+sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils
+
+# Install https://elkowar.github.io/eww/
+
 sudo tee /usr/share/xsessions/chadwm.desktop << EOL
 [Desktop Entry]
 Name=chadwm
