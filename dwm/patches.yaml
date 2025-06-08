@@ -2,6 +2,9 @@
 builddir: ~/src/suckless/dwm
 url: https://dwm.suckless.org/patches/
 patches:
+  movestack:
+    patch: dwm-movestack-20211115-a786211.diff
+    priority: 10
   vanitygaps:
     patch: dwm-cfacts-vanitygaps-6.4_combo.diff
-    priority: 10
+    priority: 20
