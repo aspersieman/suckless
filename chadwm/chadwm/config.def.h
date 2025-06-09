@@ -3,7 +3,7 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int default_border = 0;   /* to switch back to default border after dynamic border resizing via keybinds */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
@@ -65,7 +65,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static char *tags[] = {"", "", "", "", ""};
+static char *tags[] = {"", "", "", "", ""};
 
 static const char* eww[] = { "eww", "open" , "eww", NULL };
 
@@ -244,6 +244,8 @@ static const Key keys[] = {
 
     // Custom
     { MODKEY|ControlMask,               XK_l,       spawn,          SHCMD("dwm-screen-lock") },
+    { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("rofi   -show p   -modi p:'rofi-power-menu --symbols-font \"Symbols Nerd Font Mono\"'   -font \"Ubuntu Nerd Font 16\"   -theme Paper   -theme-str 'window {width: 8em;} listview {lines: 6;}'") },
+    { MODKEY,                           XK_w,       spawn,          SHCMD("rofi-wifi-menu") },
 
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)

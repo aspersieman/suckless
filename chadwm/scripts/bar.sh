@@ -9,57 +9,113 @@ interval=0
 . ~/src/opt/suckless/chadwm/scripts/bar_themes/onedark
 
 cpu() {
-  cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
+    #cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
+    cpu_val=$(cat /proc/stat | grep cpu |tail -1|awk '{print ($5*100)/($2+$3+$4+$5+$6+$7+$8+$9+$10)}'|awk '{print 100-$1}')
+    cpu_val=$(printf "%.0f" $cpu_val)
 
-  printf "^c$black^ ^b$green^ CPU"
-  printf "^c$white^ ^b$grey^ $cpu_val"
+    # Use different colour for cpu_val. 0-20 green; 21-70 white; over 70 red
+    color=$green
+    if [ $cpu_val -gt 20 ]; then
+        color=$white
+    fi
+    if [ $cpu_val -gt 70 ]; then
+        color=$red
+    fi
+
+    printf "^c$black^ ^b$green^ "
+    printf "^c$color^ ^b$grey^ $cpu_val%%"
 }
 
 pkg_updates() {
-  #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
-  # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
-  updates=$({ timeout 20 apt list --upgradable 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
+    #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
+    # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
+    updates=$({ timeout 20 apt list --upgradable 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
 
-  if [ -z "$updates" ]; then
-      printf "  ^c$green^    Fully Updated"
-  else
-      printf "  ^c$green^    $(($updates - 1))"" updates"
-  fi
+    if [ -z "$updates" ]; then
+        printf "  ^c$green^    Fully Updated"
+    else
+        printf "  ^c$green^    $(($updates - 1))"" updates"
+    fi
 }
 
 battery() {
-  get_capacity="$(cat /sys/class/power_supply/BAT0/capacity)"
-  printf "^c$blue^   $get_capacity"
+    get_capacity="$(cat /sys/class/power_supply/BAT0/capacity)"
+    # Use different icon depending on battery percentage
+    battery_icon="󰁹"
+    if [ $get_capacity -gt 0 ]; then
+        battery_icon="󰂃"
+    fi
+    if [ $get_capacity -gt 10 ]; then
+        battery_icon="󰁺"
+    fi
+    if [ $get_capacity -gt 20 ]; then
+        battery_icon="󰁻"
+    fi
+    if [ $get_capacity -gt 30 ]; then
+        battery_icon="󰁼"
+    fi
+    if [ $get_capacity -gt 40 ]; then
+        battery_icon="󰁽"
+    fi
+    if [ $get_capacity -gt 50 ]; then
+        battery_icon="󰁾"
+    fi
+    if [ $get_capacity -gt 60 ]; then
+        battery_icon="󰁿"
+    fi
+    if [ $get_capacity -gt 70 ]; then
+        battery_icon="󰂀"
+    fi
+    if [ $get_capacity -gt 80 ]; then
+        battery_icon="󰂁"
+    fi
+    if [ $get_capacity -gt 90 ]; then
+        battery_icon="󰂂"
+    fi
+    if [ $get_capacity -gt 10 ]; then
+        printf "^c$blue^ $battery_icon $get_capacity%%"
+    fi
+    if [ $get_capacity -lt 10 ]; then
+        printf "^c$red^ $battery_icon $get_capacity%%"
+    fi
 }
 
 brightness() {
-  printf "^c$red^   "
-  printf "^c$red^%.0f\n" $(cat /sys/class/backlight/*/brightness)
+    printf "^c$red^   "
+    printf "^c$red^%.0f\n" $(cat /sys/class/backlight/*/brightness)
+}
+
+disk() {
+    disk_val=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}' | sed 's/%//')
+    disk_val=$(printf "%.0f" $disk_val)
+    printf "^c$red^  "
+    printf "^c$red^ $disk_val%%"
 }
 
 mem() {
-  printf "^c$blue^^b$black^  "
-  printf "^c$blue^ $(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)"
+    mem_val=$(free -m | awk 'NR==2{printf "%.0f\t\t", $3*100/$2 }')
+    mem_val=$(printf "%.0f" $mem_val)
+    printf "^c$blue^^b$black^  "
+    printf "^c$blue^ $mem_val%%"
 }
 
 wlan() {
     # Set the name of the wifi network currently connected
     WIFI=$(nmcli -t -f active,ssid dev wifi | egrep 'yes' | sed 's/yes://') 
-	case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
-	up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^$WIFI" ;;
-	down) printf "^c$black^ ^b$blue^ 󰤭 ^d^%s" " ^c$blue^Disconnected" ;;
-	esac
+    case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
+        up) printf "^c$black^ ^b$blue^ 󰤨 ^d^%s" " ^c$blue^$WIFI" ;;
+        down) printf "^c$black^ ^b$blue^ 󰤭 ^d^%s" " ^c$blue^Disconnected" ;;
+    esac
 }
 
 clock() {
-	printf "^c$black^ ^b$darkblue^ 󱑆 "
-	printf "^c$black^^b$blue^ $(date '+%H:%M:%S')  "
+    printf "^c$black^ ^b$darkblue^ 󱑆 "
+    printf "^c$black^^b$blue^ $(date '+%H:%M:%S')  "
 }
 
 while true; do
+    [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
+    interval=$((interval + 1))
 
-  [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
-  interval=$((interval + 1))
-
-  sleep 1 && xsetroot -name "$updates $(battery) $(brightness) $(cpu) $(mem) $(wlan) $(clock)"
+    sleep 1 && xsetroot -name "$updates $(battery) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
 done
