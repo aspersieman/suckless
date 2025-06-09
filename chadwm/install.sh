@@ -7,7 +7,7 @@ sudo tee /usr/share/xsessions/chadwm.desktop << EOL
 [Desktop Entry]
 Name=chadwm
 Comment=dwm made beautiful
-Exec=/home/nicol/src/suckless/chadwm/scripts/./run.sh
+Exec=/home/nicol/src/opt/suckless/chadwm/scripts/./run.sh
 Type=Application
 EOL
 

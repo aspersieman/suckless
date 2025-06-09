@@ -6,7 +6,7 @@
 interval=0
 
 # load colors
-. ~/src/suckless/chadwm/scripts/bar_themes/onedark
+. ~/src/opt/suckless/chadwm/scripts/bar_themes/onedark
 
 cpu() {
   cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
