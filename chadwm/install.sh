@@ -1,6 +1,8 @@
 echo "Install dependencies..."
 sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight
 
+echo " TODO: Set up Rofi from here https://github.com/adi1090x/rofi ..."
+
 # Install https://elkowar.github.io/eww/
 
 sudo tee /usr/share/xsessions/chadwm.desktop << EOL

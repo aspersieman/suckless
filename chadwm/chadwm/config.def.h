@@ -152,7 +152,7 @@ static const Key keys[] = {
     {MODKEY,                            XK_u,       spawn,
         SHCMD("maim --select | xclip -selection clipboard -t image/png")},
 
-    { MODKEY,                           XK_c,       spawn,          SHCMD("rofi -show drun") },
+    { MODKEY,                           XK_c,       spawn,          SHCMD("~/.config/rofi/launchers/type-1/launcher.sh") },
     { MODKEY,                           XK_Return,  spawn,          SHCMD("st")},
 
     // toggle stuff
@@ -244,7 +244,7 @@ static const Key keys[] = {
 
     // Custom
     { MODKEY|ControlMask,               XK_l,       spawn,          SHCMD("dwm-screen-lock") },
-    { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("rofi   -show p   -modi p:'rofi-power-menu --symbols-font \"Symbols Nerd Font Mono\"'   -font \"Ubuntu Nerd Font 16\"   -theme Paper   -theme-str 'window {width: 8em;} listview {lines: 6;}'") },
+    { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("~/.config/rofi/powermenu/type-1/powermenu.sh") },
     { MODKEY,                           XK_w,       spawn,          SHCMD("rofi-wifi-menu") },
 
     TAGKEYS(                            XK_1,                       0)
