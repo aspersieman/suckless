@@ -123,14 +123,24 @@ vpn() {
     esac
 }
 
+volume() {
+    volume="$(pactl list sinks | grep -A 7 "$(pactl info | grep 'Default Sink' | cut -d' ' -f 3)" | grep Volume | awk '{print $5}')"
+    mute="$(pactl list sinks | grep -A 7 "$(pactl info | grep 'Default Sink' | cut -d' ' -f 3)" | grep Mute | awk '{print $2}')"
+    if [[ $volume == 0 || "$mute" == "yes" ]]; then
+        printf "^c$black^ ^b$darkblue^ 󰖁 "
+    else
+        printf "^c$black^ ^b$darkblue^ 󰕾 $volume"
+    fi
+}
+
 clock() {
     printf "^c$black^ ^b$darkblue^ 󱑆 "
-    printf "^c$black^^b$blue^ $(date '+%H:%M:%S')  "
+    printf "^c$black^^b$blue^ $(date '+%Y-%m-%d %H:%M:%S')  "
 }
 
 while true; do
     [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
     interval=$((interval + 1))
 
-    sleep 1 && xsetroot -name "$updates $(battery) $(disk) $(cpu) $(mem) $(wlan)$(vpn) $(clock)"
+    sleep 1 && xsetroot -name "$updates $(battery) $(disk) $(cpu) $(mem) $(wlan)$(vpn) $(volume) $(clock)"
 done
