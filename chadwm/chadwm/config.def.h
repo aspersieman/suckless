@@ -245,7 +245,6 @@ static const Key keys[] = {
     // Custom
     { MODKEY|ControlMask,               XK_l,       spawn,          SHCMD("dwm-screen-lock") },
     { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("~/.config/rofi/powermenu/type-1/powermenu.sh") },
-    { MODKEY,                           XK_w,       spawn,          SHCMD("rofi-wifi-menu") },
 
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)

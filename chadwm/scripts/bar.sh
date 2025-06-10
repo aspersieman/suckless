@@ -108,6 +108,21 @@ wlan() {
     esac
 }
 
+vpn() {
+    vpn="$(nmcli -t -f name,type connection show --order name --active 2>/dev/null | grep vpn | head -1 | cut -d ':' -f 1)"
+
+    case "$1" in
+        --disconnect)
+            nmcli con down $vpn
+            ;;
+        *)
+            if [ -n "$vpn" ]; then
+                    printf " $vpn"
+            fi
+            ;;
+    esac
+}
+
 clock() {
     printf "^c$black^ ^b$darkblue^ 󱑆 "
     printf "^c$black^^b$blue^ $(date '+%H:%M:%S')  "
@@ -117,5 +132,5 @@ while true; do
     [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
     interval=$((interval + 1))
 
-    sleep 1 && xsetroot -name "$updates $(battery) $(disk) $(cpu) $(mem) $(wlan) $(clock)"
+    sleep 1 && xsetroot -name "$updates $(battery) $(disk) $(cpu) $(mem) $(wlan)$(vpn) $(clock)"
 done
