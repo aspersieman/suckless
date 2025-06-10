@@ -1,0 +1,7 @@
+surf 
+config.h 
+*.o
+*.so
+*.orig
+*.rej
+.ccls-cache/
