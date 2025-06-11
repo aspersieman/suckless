@@ -92,6 +92,7 @@ static const Rule rules[] = {
     { "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
     { "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
     { "eww",      NULL,       NULL,       0,            0,           1,           -1 },
+    { "Yad",      NULL,       NULL,       0,            1,           1,           -1 },
 };
 
 /* layout(s) */
@@ -245,6 +246,9 @@ static const Key keys[] = {
     // Custom
     { MODKEY|ControlMask,               XK_l,       spawn,          SHCMD("dwm-screen-lock") },
     { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("~/.config/rofi/powermenu/type-1/powermenu.sh") },
+    { MODKEY,                           XK_s,       spawn,          SHCMD("screen-record.sh record fullscreen") },
+    { MODKEY|CtrlMask,                  XK_s,       spawn,          SHCMD("screen-record.sh record area") },
+    { MODKEY|ShiftMask,                 XK_s,       spawn,          SHCMD("screen-record.sh stop") },
 
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)
