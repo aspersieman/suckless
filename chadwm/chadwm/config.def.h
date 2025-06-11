@@ -247,7 +247,7 @@ static const Key keys[] = {
     { MODKEY|ControlMask,               XK_l,       spawn,          SHCMD("dwm-screen-lock") },
     { MODKEY|ControlMask,               XK_p,       spawn,          SHCMD("~/.config/rofi/powermenu/type-1/powermenu.sh") },
     { MODKEY,                           XK_s,       spawn,          SHCMD("screen-record.sh record fullscreen") },
-    { MODKEY|CtrlMask,                  XK_s,       spawn,          SHCMD("screen-record.sh record area") },
+    { MODKEY|ControlMask,               XK_s,       spawn,          SHCMD("screen-record.sh record area") },
     { MODKEY|ShiftMask,                 XK_s,       spawn,          SHCMD("screen-record.sh stop") },
 
     TAGKEYS(                            XK_1,                       0)
