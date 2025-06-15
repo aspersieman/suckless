@@ -2,7 +2,7 @@
 
 xrdb merge ~/.Xresources 
 xbacklight -set 10 &
-feh --bg-fill /home/nicol/dotfiles/nice-blue-background.png &
+feh --bg-fill /home/nicol/src/opt/catppuccin-wallpapers/landscapes/tropic_island_night.jpg &
 xset r rate 200 50 &
 picom &
 
