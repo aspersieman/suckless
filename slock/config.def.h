@@ -10,3 +10,13 @@ static const char *colorname[NUMCOLS] = {
 
 /* treat a cleared input like a wrong password (color) */
 static const int failonclear = 1;
+
+/* default message */
+static const char * message = "Suckless: Software that sucks less.";
+
+/* text color */
+static const char * text_color = "#ffffff";
+
+/* text size (must be a valid size) */
+// Use /usr/bin/xlsfonts to get a list of available fonts
+static const char * font_name = "lucidasanstypewriter-bold-24";
