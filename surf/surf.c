@@ -40,6 +40,8 @@
 
 enum { AtomFind, AtomGo, AtomUri, AtomUTF8, AtomLast };
 
+enum { Icon16x16, Icon32x32, Icon48x48, IconLast };
+
 enum {
 	OnDoc   = WEBKIT_HIT_TEST_RESULT_CONTEXT_DOCUMENT,
 	OnLink  = WEBKIT_HIT_TEST_RESULT_CONTEXT_LINK,
@@ -306,6 +308,7 @@ static ParamName loadfinished[] = {
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
+#include "surf.xpm"
 
 void
 die(const char *errstr, ...)
@@ -331,6 +334,8 @@ setup(void)
 {
 	GIOChannel *gchanin;
 	GdkDisplay *gdpy;
+	GdkPixbuf *gpix;
+	GList *icons = NULL;
 	int i, j;
 
 	/* clean up any zombies immediately */
@@ -419,6 +424,17 @@ setup(void)
 			if (defconfig[j].prio >= uriparams[i].config[j].prio)
 				uriparams[i].config[j] = defconfig[j];
 		}
+	}
+
+	/* set icons */
+	for (i = 0; i < IconLast; i++) {
+		gpix = gdk_pixbuf_new_from_xpm_data(surf_xpm[i]);
+		icons = g_list_prepend(icons, gpix);
+	}
+	gtk_window_set_default_icon_list(icons);
+	for (i = 0; icons != NULL && i < IconLast; i++) {
+		g_object_unref(icons->data);
+		icons = g_list_remove_link(icons, icons);
 	}
 }
 
@@ -2127,7 +2143,11 @@ main(int argc, char *argv[])
 	if (argc > 0)
 		arg.v = argv[0];
 	else
+#ifdef HOMEPAGE
+		arg.v = HOMEPAGE;
+#else
 		arg.v = "about:blank";
+#endif
 
 	setup();
 	c = newclient(NULL);

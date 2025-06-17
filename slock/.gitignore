@@ -1,4 +1,4 @@
 *.o
-dwm
+slock
 *.orig
 *.rej
