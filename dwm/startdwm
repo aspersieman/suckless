@@ -1,4 +1,0 @@
-#!/bin/sh
-feh --bg-scale ~/dotfiles/nice-blue-background.png &
-echo "$(date): Starting dwn" >> /var/log/dwm/$(date +%Y-%m-%d_%H.dwm.log)
-dwm >> /var/log/dwm/$(date +%Y-%m-%d_%H.dwm.log) 2>&1
