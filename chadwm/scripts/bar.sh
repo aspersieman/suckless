@@ -3,6 +3,7 @@
 # ^c$var^ = fg color
 # ^b$var^ = bg color
 
+MODE=$1
 interval=0
 
 # load colors
@@ -22,7 +23,7 @@ cpu() {
         color=$red
     fi
 
-    printf "^c$green^ ^b$black^ "
+    printf "^c$green^ ^b$black^  "
     printf "^c$color^ ^b$grey^ $cpu_val%%"
 }
 
@@ -30,8 +31,11 @@ pkg_updates() {
     #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
     # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
     updates=$({ timeout 20 apt list --upgradable 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
+    if [ "$updates" -eq "1" ]; then
+        updates=0
+    fi
 
-    if [ -z "$updates" ]; then
+    if [ -z "$updates" ] || [ "$updates" -eq "0" ]; then
         printf "  ^c$red^    Fully Updated"
     else
         printf "  ^c$red^    $(($updates - 1))"" updates"
@@ -141,6 +145,10 @@ clock() {
     printf "^c$black^^b$blue^ $(date '+%Y-%m-%d %H:%M:%S')  "
 }
 
+if [ "$MODE" = "debug" ]; then
+    printf "$(pkg_updates)"
+    exit 0
+fi
 while true; do
     [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
     interval=$((interval + 1))

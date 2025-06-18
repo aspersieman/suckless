@@ -28,9 +28,6 @@ static const int horizpadtabo       = 15;
 static const int scalepreview       = 4;
 static const int tag_preview        = 1;        /* 1 means enable, 0 is off */
 static const int colorfultag        = 1;        /* 0 means use SchemeSel for selected non vacant tag */
-// static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%",     NULL };
-// static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
-// static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
 static const char *upvol[]   = { "dwm-volume", "+5%",     NULL };
 static const char *downvol[] = { "dwm-volume", "-5%",     NULL };
 static const char *mutevol[] = { "dwm-volume", "toggle",  NULL };
@@ -40,10 +37,10 @@ static const int new_window_attach_on_end = 0; /*  1 means the new window will a
 #define ICONSIZE 19   /* icon size */
 #define ICONSPACING 8 /* space between icon and title */
 
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:style:medium:size=12:antialias=true:autohint=true" };
+static const char *fonts[]          = { "Ubuntu Nerd Font:style:medium:size=12:antialias=true:autohint=true" };
 
 // theme
-#include "themes/tokyonight.h"
+#include "themes/catppuccin.h"
 
 static const char *colors[][3]      = {
     /*                     fg       bg      border */
@@ -249,6 +246,8 @@ static const Key keys[] = {
     { MODKEY,                           XK_s,       spawn,          SHCMD("screen-record.sh record fullscreen") },
     { MODKEY|ControlMask,               XK_s,       spawn,          SHCMD("screen-record.sh record area") },
     { MODKEY|ShiftMask,                 XK_s,       spawn,          SHCMD("screen-record.sh stop") },
+    { MODKEY,                           XK_y,       spawn,          SHCMD("yodo.sh") },
+    { MODKEY,                           XK_r,       spawn,          SHCMD("reminder.sh gui") },
 
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)
