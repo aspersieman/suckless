@@ -1,5 +1,5 @@
 echo "Install dependencies..."
-sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight
+sudo apt install feh libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight blueman yad
 
 echo " TODO: Set up Rofi from here https://github.com/adi1090x/rofi ..."
 
