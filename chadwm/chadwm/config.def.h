@@ -247,6 +247,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,                 XK_s,       spawn,          SHCMD("screen-record.sh stop") },
     { MODKEY,                           XK_y,       spawn,          SHCMD("yodo.sh") },
     { MODKEY,                           XK_r,       spawn,          SHCMD("reminder.sh gui") },
+    { MODKEY,                           XK_z,       spawn,          SHCMD("dwm-shortcuts.sh") },
 
     TAGKEYS(                            XK_1,                       0)
     TAGKEYS(                            XK_2,                       1)
