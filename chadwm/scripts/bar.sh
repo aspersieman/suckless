@@ -2,14 +2,16 @@
 
 # ^c$var^ = fg color
 # ^b$var^ = bg color
+# ps aux | grep bar.sh | grep -v grep | awk '{print $2}' | xargs kill -9
 
 MODE=$1
 interval=0
+INTERFACE=$(ip addr show | awk '/inet.*brd/{print $NF}' | egrep -v "(br-*)|(docker)" | head -1)
 
 # load colors
 . ~/src/opt/suckless/chadwm/scripts/bar_themes/catppuccin
 
-cpu() {
+function cpu() {
     #cpu_val=$(grep -o "^[^ ]*" /proc/loadavg)
     cpu_val=$(cat /proc/stat | grep cpu |tail -1|awk '{print ($5*100)/($2+$3+$4+$5+$6+$7+$8+$9+$10)}'|awk '{print 100-$1}')
     cpu_val=$(printf "%.0f" $cpu_val)
@@ -27,7 +29,7 @@ cpu() {
     printf "^c$color^ ^b$grey^ $cpu_val%%"
 }
 
-pkg_updates() {
+function pkg_updates() {
     #updates=$({ timeout 20 doas xbps-install -un 2>/dev/null || true; } | wc -l) # void
     # updates=$({ timeout 20 checkupdates 2>/dev/null || true; } | wc -l) # arch
     updates=$({ timeout 20 apt list --upgradable 2>/dev/null || true; } | wc -l)  # apt (ubuntu, debian etc)
@@ -42,26 +44,26 @@ pkg_updates() {
     fi
 }
 
-brightness() {
+function brightness() {
     printf "^c$red^   "
     printf "^c$red^%.0f\n" $(cat /sys/class/backlight/*/brightness)
 }
 
-disk() {
+function disk() {
     disk_val=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}' | sed 's/%//')
     disk_val=$(printf "%.0f" $disk_val)
     printf "^c$green^^b$black^  "
     printf "^c$green^ $disk_val%%"
 }
 
-mem() {
+function mem() {
     mem_val=$(free -m | awk 'NR==2{printf "%.0f\t\t", $3*100/$2 }')
     mem_val=$(printf "%.0f" $mem_val)
     printf "^c$green^^b$black^  "
     printf "^c$green^ $mem_val%%"
 }
 
-wlan() {
+function wlan() {
     # Set the name of the wifi network currently connected
     WIFI=$(nmcli -t -f active,ssid dev wifi | egrep 'yes' | sed 's/yes://') 
     case "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" in
@@ -70,7 +72,7 @@ wlan() {
     esac
 }
 
-vpn() {
+function vpn() {
     vpn="$(nmcli -t -f name,type connection show --order name --active 2>/dev/null | grep vpn | head -1 | cut -d ':' -f 1)"
 
     case "$1" in
@@ -85,7 +87,43 @@ vpn() {
     esac
 }
 
-volume() {
+# Function to show network traffic (speed) per second
+function net_traffic() {
+    local interface=${1:-eth0}  # default to eth0, or pass interface as argument
+
+    # Read initial RX and TX bytes
+    read rx1 tx1 < <(awk -v iface="$interface" '$1 ~ iface":" {
+        gsub(":", "", $1); print $2, $10
+    }' /proc/net/dev)
+
+    sleep 1
+
+    # Read RX and TX bytes again
+    read rx2 tx2 < <(awk -v iface="$interface" '$1 ~ iface":" {
+        gsub(":", "", $1); print $2, $10
+    }' /proc/net/dev)
+
+    # Calculate byte difference
+    local rx_diff=$((rx2 - rx1))
+    local tx_diff=$((tx2 - tx1))
+
+    # Convert to human-readable format (KB/s or MB/s)
+    printf "↓ %9s/s↑ %9s/s\n" "$(human_readable $rx_diff)" "$(human_readable $tx_diff)"
+}
+
+# Helper to convert bytes to KB/s or MB/s
+human_readable() {
+    local bytes=$1
+    if (( bytes > 1048576 )); then
+        echo "$(awk "BEGIN {printf \"%.2fMB\", $bytes/1048576}")"
+    elif (( bytes > 1024 )); then
+        echo "$(awk "BEGIN {printf \"%.2fKB\", $bytes/1024}")"
+    else
+        echo "${bytes}B"
+    fi
+}
+
+function volume() {
     volume="$(pactl list sinks | grep -A 7 "$(pactl info | grep 'Default Sink' | cut -d' ' -f 3)" | grep Volume | awk '{print $5}')"
     mute="$(pactl list sinks | grep -A 7 "$(pactl info | grep 'Default Sink' | cut -d' ' -f 3)" | grep Mute | awk '{print $2}')"
     if [[ "$volume" == 0 || "$mute" == "yes" ]]; then
@@ -96,7 +134,7 @@ volume() {
     fi
 }
 
-battery() {
+function battery() {
     get_capacity="$(cat /sys/class/power_supply/BAT0/capacity)"
     # Use different icon depending on battery percentage
     battery_icon="󰁹"
@@ -140,18 +178,21 @@ battery() {
     fi
 }
 
-clock() {
+function clock() {
     printf "^c$black^ ^b$darkblue^ 󱑆 "
     printf "^c$black^^b$blue^ $(date '+%Y-%m-%d %H:%M:%S')  "
 }
 
 if [ "$MODE" = "debug" ]; then
-    printf "$(pkg_updates)"
+    while true; do
+        echo "$(disk) $(cpu) $(mem) $(wlan)$(vpn)$(net_traffic $INTERFACE) $(volume) $(battery) $(clock)"
+    done
     exit 0
 fi
 while true; do
     [ $interval = 0 ] || [ $(($interval % 3600)) = 0 ] && updates=$(pkg_updates)
     interval=$((interval + 1))
 
-    sleep 1 && xsetroot -name "$updates $(disk) $(cpu) $(mem) $(wlan)$(vpn) $(volume) $(battery) $(clock)"
+    # net_traffic does the sleep 1
+    xsetroot -name "$(net_traffic $INTERFACE) $updates $(disk) $(cpu) $(mem) $(volume) $(battery) $(clock)"
 done

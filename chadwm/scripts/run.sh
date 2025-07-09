@@ -9,6 +9,7 @@ xss-lock -- slock &
 picom &
 
 bash /home/nicol/src/opt/suckless/chadwm/scripts/bar.sh &
-blueman-manager &
+blueman-applet &
+nm-applet &
 yodo.sh icon &
 while type chadwm >/dev/null; do chadwm && continue || break; done
