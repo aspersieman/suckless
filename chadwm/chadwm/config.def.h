@@ -67,13 +67,11 @@ static char *tags[] = {"", "", "", "", ""};
 static const char* eww[] = { "eww", "open" , "eww", NULL };
 static const char* launcher[] = { "/home/nicol/.config/rofi/launchers/type-1/launcher.sh", NULL };
 static const char* power[] = { "/home/nicol/.config/rofi/powermenu/type-1/powermenu.sh", NULL };
-static const char* calendar[] = { "st", "-e", "calcure", NULL };
 
 static const Launcher launchers[] = {
     /* command     name to display */
     { launcher,         "" },
     { power,            "" },
-    { calendar,         "󰃭" },
 };
 
 static const int tagschemes[] = {

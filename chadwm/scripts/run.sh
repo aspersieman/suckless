@@ -11,5 +11,5 @@ picom &
 bash /home/nicol/src/opt/suckless/chadwm/scripts/bar.sh &
 blueman-applet &
 nm-applet &
-yodo.sh icon &
+yalcure.sh &
 while type chadwm >/dev/null; do chadwm && continue || break; done
