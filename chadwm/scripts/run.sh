@@ -13,7 +13,7 @@ bash /home/nicol/src/opt/suckless/chadwm/scripts/bar.sh &
 blueman-applet &
 pasystray &
 nm-applet &
-yalcure.sh &
+yodo.sh icon &
 buttery.sh &
 ~/.dropbox-dist/dropboxd &
 while type chadwm >/dev/null; do chadwm && continue || break; done
