@@ -1,6 +1,5 @@
 echo "Install dependencies..."
-sudo apt install libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight blueman yad pipx pasystray
-pipx install calcure
+sudo apt install libimlib2-dev picom feh acpi rofi xclip maim dash x11-xserver-utils light xbacklight blueman yad pasystray
 
 echo " TODO: Set up Rofi from here https://github.com/adi1090x/rofi ..."
 
